@@ -1,0 +1,7 @@
+# Used by the application
+uploads/
+database.db
+buttons.json
+
+# Used by Python
+__pycache__/

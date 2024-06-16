@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Manage - Stream It!</title>
+        <link rel="stylesheet" href="/resources/css/picnic.min.css">
+        <link rel="stylesheet" href="/resources/css/base.css">
+        <script src="/module"></script>
+        <script src="/resources/js/manage.js"></script>
+    </head>
+    <body>
+        <div class="flex four-1200 three-900 two" id="buttons">
+            <div class="p-3 half">
+                <article class="card">
+                    <header>
+                        <img style="width: 48px; height: auto" src="/favicon.png" />
+                        <h1>
+                            Manage
+                            <span class="label">Version b0.1.0</span>
+                        </h1>
+                        <button id="close-button" class="dangerous">Shut Down</button>
+                    </header>
+                    <span class="p-3">
+                        Use this interface to configure your buttons and widgets.
+                    </span>
+                    <span class="p-3">
+                        <a href="/" target="_blank">
+                            <button>Open Panel</button>
+                        </a>
+                        <a
+                            data-tooltip="A browser source for OBS, XSplit, etc." 
+                            href="/play" 
+                            target="_blank">
+                            <button>Browser Source</button>
+                        </a>
+                    </span>
+                    <small class="p-3">
+                        Stream It! is public domain software that can be modified and distributed 
+                        in any way thanks to being released under the
+                        <a href="https://creativecommons.org/public-domain/cc0/">CC0</a>
+                        license.
+                        <br>
+                        Consider visiting 
+                        <a href="https://ssblur.com">its creator's website</a>
+                        to find and support their other projects.
+                    </small>
+                </article>
+            </div>
+            <div class="p-3 half">
+                <article class="card">
+                    <header>
+                        <h1>
+                            Buttons
+                        </h1>
+                    </header>
+                    <div class="p-3" id="button-container">
+                    </div>
+                    <div class="p-3">
+                        <button 
+                            data-tooltip="Saves changes and syncs them to any open decks." 
+                            class="tooltip-right two-fifth"
+                            id="save-button">
+                            Save
+                        </button>
+                        <button 
+                            data-tooltip="Removes all buttons and resets any open decks." 
+                            class="dangerous tooltip-left two-fifth"
+                            id="reset-button">
+                            Reset
+                        </button>
+                    </div>
+                </article>
+            </div>
+            <template id="button-template">
+                <button class="p-1 full button-name">Button</button>
+                <article class="card">
+                    <footer class="p-3">
+                        <h3>Appearance</h3>
+                        <fieldset class="flex one">
+                            <label>
+                                <input class="appearance-name" 
+                                    type="text" 
+                                    placeholder="Button Name [Button]" 
+                                    value="">
+                                <input class="appearance-color"
+                                    type="text" 
+                                    placeholder="Color [#127EDC]" 
+                                    value="">
+                                
+                                <span class="half">Column Width (1-4): </span>
+                                <input class="appearance-width half right"
+                                    min="1"
+                                    max="4"
+                                    step="1"
+                                    type="number" 
+                                    placeholder="width" 
+                                    value="1">
+                            </label>
+                        </fieldset>
+                        <hr>
+                        <span class="placeholder-module">
+                            [Placeholder for module controls.]
+                        </span>
+                        <hr>
+                        <fieldset class="flex one">
+                            <label>
+                                <button 
+                                    class="dangerous full delete-button">
+                                    Delete
+                                </button>
+                            </label>
+                            <input type="hidden" class="button-uuid">
+                        </fieldset>
+                </article>
+            </template>
+        </div>
+    </body>
+</html>
