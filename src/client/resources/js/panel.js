@@ -44,8 +44,25 @@ function loadButtons() {
         });
 }
 
+var version = null;
+function checkVersion() {
+    fetch(
+        "/api/version",
+        {
+            method: "POST",
+            body: ""
+        }
+    )
+        .then(response => response.json())
+        .then(data => {
+            if(data != version)
+                loadButtons()
+            version = data;
+        });
+}
+
 window.onload = () => {
     // Load existing buttons on page load
-    loadButtons();
-    setInterval(loadButtons, 5000);
+    checkVersion();
+    setInterval(checkVersion, 5000);
 }
