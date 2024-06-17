@@ -1,7 +1,7 @@
 from os.path import realpath, dirname, join
-from ...server.database import add_sound
 from time import sleep
 from pynput.keyboard import Controller, Key
+from ...server.database import add_sound
 
 special_keys = {
     "alt": Key.alt,
@@ -70,6 +70,22 @@ def act(json):
     keys = Controller()
     press = json["type"]
     key = json["key"]
+    holds = []
+
+    if json["ctrl"]:
+        holds += [Key.ctrl]
+    if json["shift"]:
+        holds += [Key.shift]
+    if json["alt"]:
+        holds += [Key.alt]
+    if json["cmd"]:
+        holds += [Key.cmd]
+
+    for k in holds:
+        keys.press(k)
+    if holds:
+        sleep(0.02)
+
     if key in special_keys:
         key = special_keys[key]
 
@@ -81,6 +97,9 @@ def act(json):
 
     if press != "press":
         keys.release(key)
+
+    for k in holds:
+        keys.release(k)
 
 def javascript():
     return open(join(dirname(realpath(__file__)), "module.js"), "rb")

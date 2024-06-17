@@ -132,6 +132,22 @@ class Module {
             </small>
             <fieldset class="flex one">
                 <label>
+                    <input class="key-ctrl" type="checkbox" ${json.ctrl ? "checked" : ""}>
+                    <span class="checkable">Ctrl</span>
+                </label>
+                <label>
+                    <input class="key-shift" type="checkbox" ${json.shift ? "checked" : ""}>
+                    <span class="checkable">Shift</span>
+                </label>
+                <label>
+                    <input class="key-alt" type="checkbox" ${json.alt ? "checked" : ""}>
+                    <span class="checkable">Alt</span>
+                </label>
+                <label>
+                    <input class="key-cmd" type="checkbox" ${json.cmd ? "checked" : ""}>
+                    <span class="checkable">Windows / Command / Super</span>
+                </label>
+                <label>
                     <select class="key-key" value="${json.key ?? "space"}">
                         ${options}
                     </select>
@@ -155,9 +171,17 @@ class Module {
     static toJSON(element) {
         let key = element.getElementsByClassName("key-key")[0];
         let type = element.getElementsByClassName("key-type")[0];
+        let ctrl = element.getElementsByClassName("key-ctrl")[0];
+        let shift = element.getElementsByClassName("key-shift")[0];
+        let alt = element.getElementsByClassName("key-alt")[0];
+        let cmd = element.getElementsByClassName("key-cmd")[0];
         return {
             key: key.value,
-            type: type.value
+            type: type.value,
+            ctrl: ctrl.checked,
+            shift: shift.checked,
+            alt: alt.checked,
+            cmd: cmd.checked,
         };
     }
 
