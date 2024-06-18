@@ -14,7 +14,7 @@ if __name__ == "__main__":
     ADDR = addr
     PORT = 18104
 
-    # webbrowser.open(f"http://{ADDR}:{PORT}/manage", new=0, autoraise=True)
+    webbrowser.open(f"http://{ADDR}:{PORT}/manage", new=0, autoraise=True)
     print("Started server.")
     print(f"Manage panel: http://{ADDR}:{PORT}/manage")
     start(ADDR, PORT)

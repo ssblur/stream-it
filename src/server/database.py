@@ -25,9 +25,31 @@ def __setup():
             approved boolean
         );
     """)
+    curs.execute("""
+        create table if not exists graphic_queue (
+            filename varchar(128),
+            type varchar(3),
+            submitted timestamp,
+            x real,
+            y real,
+            width real,
+            height real,
+            fade boolean,
+            duration real
+        );
+    """)
     conn.commit()
     curs.close()
     conn.close()
+
+def __convert_timestamps(rows):
+    out = []
+    for row in rows:
+        out.append(list(row))
+        for col in range(len(row)):
+            if isinstance(row[col], datetime):
+                out[-1][col] = row[col].strftime("%Y-%m-%d %H:%M:%S")
+    return out
 
 def add_sound(filename):
     conn = sqlite3.connect(
@@ -111,5 +133,58 @@ def approve_code(code):
         (datetime.now(), code, datetime.now() - timedelta(hours=24))
     )
     conn.commit()
+
+def add_image(filename, duration, x, y, width, height, fade_in):
+    conn = sqlite3.connect(
+        "database.db", 
+        detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES,
+        
+    )
+    curs = conn.cursor()
+
+    curs.execute(
+        "insert into graphic_queue values (?, ?, ?, ?, ?, ?, ?, ?, ?);",
+        (
+            filename,
+            "gfx",
+            datetime.now(),
+            x, 
+            y,
+            width,
+            height,
+            fade_in,
+            duration
+        )
+    )
+
+    conn.commit()
+    curs.close()
+    conn.close()
+
+def get_graphics():
+    conn = sqlite3.connect(
+        "database.db", 
+        detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES
+    )
+    curs = conn.cursor()
+
+    curs.execute("""select 
+        rowid,
+        filename,
+        type,
+        submitted,
+        x,
+        y,
+        width,
+        height,
+        fade,
+        duration 
+        from graphic_queue where submitted > ?;""", (datetime.now() - timedelta(seconds=5),))
+    results = __convert_timestamps(curs.fetchall())
+
+    curs.close()
+    conn.close()
+
+    return results
 
 __setup()

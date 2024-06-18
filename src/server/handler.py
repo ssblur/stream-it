@@ -10,8 +10,9 @@ import re
 from http.cookies import SimpleCookie
 from random import choice
 from string import ascii_letters
+from qrcode import make as qr
 from .modules import modules
-from .database import add_sound, get_sounds, get_or_generate_code, approve_code
+from .database import add_sound, get_sounds, get_or_generate_code, approve_code, get_graphics
 
 special_paths = {
     "/": "./src/client/index.html",
@@ -193,6 +194,9 @@ class Handler(BaseHTTPRequestHandler):
                     self.header(200, "text/javascript")
                     self.write_file(f)
                     return
+        elif path.startswith("/qr"):
+            self.header(200, "image/png")
+            qr(f"http://{self.server.server_address[0]}:{self.server.server_address[1]}").save(self.wfile)
         elif path in special_paths:
             if path in restricted_paths and self.client_address[0] != self.server.server_address[0]:
                 self.header(401, "text/plain")
@@ -278,7 +282,10 @@ class Handler(BaseHTTPRequestHandler):
                 return
             elif path.startswith("/queue"):
                 self.header(200, "application/json")
-                self.write_json(get_sounds())
+                self.write_json({
+                    "sounds": get_sounds(),
+                    "graphics": get_graphics(),
+                })
                 return
         else:
             self.do_GET()

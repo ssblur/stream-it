@@ -39,3 +39,7 @@ button {
     max-height: 750px;
     overflow-y: auto;
 }
+
+.qr-code {
+    width: 96px;
+}
