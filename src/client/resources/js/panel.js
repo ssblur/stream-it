@@ -61,8 +61,13 @@ function checkVersion() {
         });
 }
 
+function fullscreen() {
+    document.body.requestFullscreen();
+}
+
 window.onload = () => {
     // Load existing buttons on page load
     checkVersion();
     setInterval(checkVersion, 5000);
+    document.getElementById("fullscreen-button").onclick = fullscreen;
 }
