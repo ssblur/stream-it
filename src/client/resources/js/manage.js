@@ -38,7 +38,7 @@ function createButton(uuid, name, color, width, modules) {
             method: "POST",
             body: "{}"
         }
-    ).then(console.log);
+    );
 
     let nameElement = div.getElementsByClassName("appearance-name")[0];
     nameElement.oninput = () => {
@@ -82,7 +82,7 @@ window.onload = () => {
         button.className = "full";
         button.innerText = `Add ${module.getName()}`;
         button.onclick = () => {
-            createButton(uuidv4(), "", "", 1, data)
+            createButton(uuidv4(), "Button", "", 1, data)
         };
 
         container.appendChild(button);
@@ -104,7 +104,6 @@ window.onload = () => {
 
             for(let className of moduleConfig.classList)
                 if(className.startsWith("module-config-")) { // Seriously I know I was sick but why did I do this
-                    console.log(className.substring(14));
                     data[className.substring(14)] = MODULES[className.substring(14)].toJSON(moduleConfig);
                 }
 
@@ -122,7 +121,7 @@ window.onload = () => {
                 method: "POST",
                 body: JSON.stringify(output)
             }
-        ).then(console.log);
+        );
     };
 
     let resetButton = document.getElementById("reset-button");
@@ -137,7 +136,7 @@ window.onload = () => {
                 method: "POST",
                 body: "{}"
             }
-        ).then(console.log);
+        );
     };
 
     

@@ -15,13 +15,13 @@ function createButton(uuid, name, color, width, modules) {
     button.className = "p-1";
 
     if(width < 2) {
-        button.className += " fourth";
+        button.className += " button-w-1";
     } else if(width < 3) {
-        button.className += " half";
+        button.className += " button-w-2";
     } else if(width < 4) {
-        button.className += " three-fourth";
+        button.className += " button-w-3";
     } else {
-        button.className += " full";
+        button.className += " button-w-4";
     }
 }
 

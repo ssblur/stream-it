@@ -19,7 +19,6 @@ function checkQueue() {
     )
         .then(response => response.json())
         .then(data => {
-            console.log(data);
             setTimeout(checkQueue, 100);
             for(let row of data)
                 tryPlay(row);

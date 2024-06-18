@@ -33,3 +33,9 @@ body {
 button {
     border-radius: 0px;
 }
+
+.button-config {
+    height: auto;
+    max-height: 750px;
+    overflow-y: auto;
+}

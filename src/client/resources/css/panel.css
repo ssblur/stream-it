@@ -6,3 +6,55 @@ body {
 button {
     margin: 0;
 }
+
+.button-w-1 {
+    width: 25%;
+}
+
+.button-w-2 {
+    width: 50%;    
+}
+
+.button-w-3 {
+    width: 75%;    
+}
+
+.button-w-4 {
+    width: 100%;    
+}
+
+@media only screen and (max-width: 900px) {
+    .button-w-1 {
+        width: 33.3333%;
+    }
+    
+    .button-w-2 {
+        width: 66.6666%;    
+    }
+    
+    .button-w-3 {
+        width: 100%;    
+    }
+    
+    .button-w-4 {
+        width: 100%;    
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .button-w-1 {
+        width: 50%;
+    }
+    
+    .button-w-2 {
+        width: 50%;    
+    }
+    
+    .button-w-3 {
+        width: 100%;    
+    }
+    
+    .button-w-4 {
+        width: 100%;    
+    }
+}
