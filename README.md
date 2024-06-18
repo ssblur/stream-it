@@ -2,10 +2,8 @@
 
 ## WARNING
 
-Stream It! is not finished, and, specifically, is lacking any sort of authentication to access 
-the main button panel.
-If you run it in this state, anybody on your local network will be able to trigger any actions
-you've configured.
+Stream It! should not be used on public networks, as though there is basic authentication in
+place, it is not particularly robust.
 
 Do not leave Stream It! running on multi-user machines, as other users are able to reconfigure
 your buttons and layout.
