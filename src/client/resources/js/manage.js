@@ -139,6 +139,19 @@ window.onload = () => {
         );
     };
 
+    let approveButton = document.getElementById("approve-button");
+    approveButton.onclick = () => {
+        fetch(
+            "/api/approve",
+            {
+                method: "POST",
+                body: JSON.stringify({
+                    code: document.getElementById("approve-code").value
+                })
+            }
+        )
+    }
+
     
     let closeButton = document.getElementById("close-button");
     closeButton.onclick = () => {

@@ -7,8 +7,11 @@ from mimetypes import guess_type
 from json import loads, load, dump, dumps
 from uuid import uuid4
 import re
+from http.cookies import SimpleCookie
+from random import choice
+from string import ascii_letters
 from .modules import modules
-from .database import add_sound, get_sounds
+from .database import add_sound, get_sounds, get_or_generate_code, approve_code
 
 special_paths = {
     "/": "./src/client/index.html",
@@ -84,8 +87,20 @@ class Handler(BaseHTTPRequestHandler):
 
 
     @cached_property
-    def cookies(self):
+    def cookies(self) -> SimpleCookie:
         return SimpleCookie(self.headers.get("Cookie"))
+
+    def session(self):
+        cookie = self.cookies
+        if "session" in cookie:
+            session = cookie["session"].value
+            self.new_cookie = False
+        else:
+            session = ''.join(choice(ascii_letters) for i in range(128))
+            cookie["session"] = session
+            self.new_cookie = cookie
+
+        self.code, self.code_approved = get_or_generate_code(self.client_address[0], session)
 
     def write(self, out):
         self.wfile.write(out.encode("utf-8"))
@@ -99,10 +114,44 @@ class Handler(BaseHTTPRequestHandler):
     def header(self, code, type):
         self.send_response(code)
         self.send_header("Content-Type", type)
+        if self.new_cookie:
+            self.send_header("Set-Cookie", self.new_cookie.output(header="") + "; Path=/")
         self.end_headers()
 
     def do_GET(self):
+        self.session()
+        
         path = self.url.path
+
+        if path.startswith("/code"):
+            with open("./src/client/code.html", "r") as f:
+                self.header(200, "text/html")
+                self.write(f.read().replace("{{code}}", self.code))
+                return
+        elif path.startswith("/resources"):
+            location = realpath(join("./src/client", path[1:]))
+            safe_location = realpath("./src/client/resources")
+            if commonprefix([location, safe_location]) != safe_location:
+                self.header(401, "text/plain")
+                self.write("Access Denied")
+                return
+            
+            with open(location, "rb") as f:
+                self.header(200, guess_type(location)[0])
+                self.write_file(f)
+                return
+        
+        if (
+            self.client_address[0] != self.server.server_address[0]
+            and not self.code_approved
+        ):
+            self.send_response(307)
+            self.send_header("Content-Type", "text/plain")
+            self.send_header("Location", "/code")
+            if self.new_cookie:
+                self.send_header("Set-Cookie", self.new_cookie.output(header="") + "; Path=/")
+            self.end_headers()
+
         if path.startswith("/api"):
             self.header(405, "text/plain")
             self.write(f"API is POST-only")
@@ -144,18 +193,6 @@ class Handler(BaseHTTPRequestHandler):
                     self.header(200, "text/javascript")
                     self.write_file(f)
                     return
-        elif path.startswith("/resources"):
-            location = realpath(join("./src/client", path[1:]))
-            safe_location = realpath("./src/client/resources")
-            if commonprefix([location, safe_location]) != safe_location:
-                self.header(401, "text/plain")
-                self.write("Access Denied")
-                return
-            
-            with open(location, "rb") as f:
-                self.header(200, guess_type(location)[0])
-                self.write_file(f)
-                return
         elif path in special_paths:
             if path in restricted_paths and self.client_address[0] != self.server.server_address[0]:
                 self.header(401, "text/plain")
@@ -172,11 +209,32 @@ class Handler(BaseHTTPRequestHandler):
         return
 
     def do_POST(self):
+        self.session()
+
         path = self.url.path
         
         if path.startswith("/api"):
             path = path[4:]
-            if path.startswith("/activate"):
+            if path.startswith("/code"):
+                if self.code_approved:
+                    self.header(200, "application/json")
+                    self.write("{\"error\": 200, \"approved\": true}")
+                else:
+                    self.header(200, "application/json")
+                    self.write("{\"error\": 200, \"approved\": false}")
+            elif (
+                self.client_address[0] != self.server.server_address[0]
+                and not self.code_approved
+            ):
+                self.header(401, "application/json")
+                self.write("{\"error\": 401, \"message\": \"Access Denied\"}")
+                return
+            elif path.startswith("/approve"):
+                approve_code(self.post_json["code"])
+                self.header(200, "application/json")
+                self.write("{\"error\": 200, \"message\": \"OK\"}")
+                return
+            elif path.startswith("/activate"):
                 path = path[10:]
                 with open("buttons.json", "r") as f:
                     json = load(f)

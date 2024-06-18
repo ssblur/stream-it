@@ -1,0 +1,14 @@
+.main {
+    width: 50%;
+    height: 25%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.code {
+    background-color: #00f1;
+    text-align: center;
+    border-radius: 15px;
+}
