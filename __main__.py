@@ -1,8 +1,15 @@
 import webbrowser
-from src.server import start
 import socket
+import sys
+from src.server import start
+from src.util import frozen
 
 if __name__ == "__main__":
+    if frozen():
+        log_file = open("./latest.log", "w")
+        sys.stdout = log_file
+        sys.stderr = log_file
+
     # Generally we presume that any IP works.
     # If you need to bind to a specific IP, open a ticket and I'll add support.
     # But for now, just change ADDR to the address you want to bind to.
@@ -18,3 +25,6 @@ if __name__ == "__main__":
     print("Started server.")
     print(f"Manage panel: http://{ADDR}:{PORT}/manage")
     start(ADDR, PORT)
+
+    if frozen():
+        log_file.close()
