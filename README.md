@@ -32,8 +32,8 @@ into its own directory and running it.
 
 To set this up on Linux or modify the application, install Python 3.10 or newer 
 using a package manager or through [the official website](https://www.python.org/),
-then install using `python -m pip install pipenv` and install and run this project
-using `pipenv install` and `pipenv run .` in the project directory.
+then install pipenv using `python -m pip install pipenv` and install and run this 
+project using `pipenv install` and `pipenv run python .` in the project directory.
 
 Once running, it will spit a link out in console to the local management panel,
 where you can create and configure buttons.
