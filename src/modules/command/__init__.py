@@ -1,9 +1,10 @@
-from os.path import realpath, dirname, join
-from ...server.database import add_sound
+from os.path import dirname, join, relpath
 from os import system
+from ...server.database import add_sound
+from ...util import module_file
 
 def act(json):
     system(json["command"])
 
 def javascript():
-    return open(join(dirname(realpath(__file__)), "module.js"), "rb")
+    return module_file(join(dirname(relpath(__file__, ".")), "module.js"))

@@ -5,3 +5,8 @@ buttons.json
 
 # Used by Python
 __pycache__/
+
+# Pyinstaller output
+dist/
+build/
+*.spec

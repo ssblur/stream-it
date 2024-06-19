@@ -1,7 +1,8 @@
-from os.path import realpath, dirname, join
+from os.path import dirname, join, relpath
 from time import sleep
 from pynput.keyboard import Controller, Key
 from ...server.database import add_sound
+from ...util import module_file
 
 special_keys = {
     "alt": Key.alt,
@@ -102,4 +103,4 @@ def act(json):
         keys.release(k)
 
 def javascript():
-    return open(join(dirname(realpath(__file__)), "module.js"), "rb")
+    return module_file(join(dirname(relpath(__file__, ".")), "module.js"))

@@ -1,6 +1,7 @@
-from os.path import realpath, dirname, join
+from os.path import dirname, join, relpath
 from random import randint
 from ...server.database import add_image
+from ...util import module_file
 
 
 def act(json):
@@ -21,4 +22,4 @@ def act(json):
     )
 
 def javascript():
-    return open(join(dirname(realpath(__file__)), "module.js"), "rb")
+    return module_file(join(dirname(relpath(__file__, ".")), "module.js"))

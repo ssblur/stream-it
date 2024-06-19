@@ -13,6 +13,8 @@ from string import ascii_letters
 from qrcode import make as qr
 from .modules import modules
 from .database import add_sound, get_sounds, get_or_generate_code, approve_code, get_graphics
+from ..util import module_file, frozen
+import sys
 
 special_paths = {
     "/": "./src/client/index.html",
@@ -125,13 +127,18 @@ class Handler(BaseHTTPRequestHandler):
         path = self.url.path
 
         if path.startswith("/code"):
-            with open("./src/client/code.html", "r") as f:
+            with module_file("./src/client/code.html", "r") as f:
                 self.header(200, "text/html")
                 self.write(f.read().replace("{{code}}", self.code))
                 return
         elif path.startswith("/resources"):
-            location = realpath(join("./src/client", path[1:]))
-            safe_location = realpath("./src/client/resources")
+            if frozen():
+                location = realpath(join(sys._MEIPASS, "src/client", path[11:]))
+                safe_location = realpath(join(sys._MEIPASS, "src/client"))
+            else:
+                location = realpath(join("./src/client", path[1:]))
+                safe_location = realpath("./src/client/resources")
+            print(location, safe_location)
             if commonprefix([location, safe_location]) != safe_location:
                 self.header(401, "text/plain")
                 self.write("Access Denied")
@@ -172,7 +179,7 @@ class Handler(BaseHTTPRequestHandler):
                 self.write("Access Denied")
                 return
             
-            with open(location, "rb") as f:
+            with module_file(location, "rb") as f:
                 self.header(200, guess_type(location)[0])
                 self.write_file(f)
                 return
@@ -204,7 +211,7 @@ class Handler(BaseHTTPRequestHandler):
                 return
 
             location = special_paths[path]
-            with open(location, "rb") as f:
+            with module_file(location, "rb") as f:
                 self.header(200, guess_type(location)[0])
                 self.write_file(f)
                 return
