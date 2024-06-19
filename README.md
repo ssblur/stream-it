@@ -26,8 +26,12 @@ Don't blame me for any funk or jank.
 
 ## Setup
 
-To set this up, install Python 3.10 or newer using a package manager or through 
-[the official website](https://www.python.org/),
+On Windows, you can get started using this application by downloading StreamIt.exe
+from [Releases](https://github.com/ssblur/stream-it/releases), then placing it
+into its own directory and running it.
+
+To set this up on Linux or modify the application, install Python 3.10 or newer 
+using a package manager or through [the official website](https://www.python.org/),
 then install using `python -m pip install pipenv` and install and run this project
 using `pipenv install` and `pipenv run .` in the project directory.
 
