@@ -9,4 +9,4 @@ def act(json):
         modules[macro["mod"]].act(macro["data"])
 
 def javascript():
-    return module_file(join(dirname(relpath(__file__, ".")), "module.js"))
+    return open(join(dirname(__file__), "module.js"), "rb")
