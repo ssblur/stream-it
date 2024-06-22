@@ -8,6 +8,7 @@ import webbrowser
 def start(addr, port):
     server = ThreadingHTTPServer((addr, port), Handler)
 
+    tray = None
     if platform == "win32":
         from infi.systray import SysTrayIcon
 
@@ -18,8 +19,8 @@ def start(addr, port):
                 (
                     "Open Manage Panel", 
                     None, 
-                    lambda: webbrowser.open(
-                        f"http://{server.server_address[0]}{server.server_address[1]}:/manage", 
+                    lambda t: webbrowser.open(
+                        f"http://{server.server_address[0]}:{server.server_address[1]}/manage", 
                         new=0, 
                         autoraise=True
                     )
@@ -27,6 +28,10 @@ def start(addr, port):
             ),
             on_quit=lambda t: server.shutdown()
         )
+
         tray.start()
 
     server.serve_forever()
+
+    if tray:
+        tray.shutdown()
