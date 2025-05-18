@@ -4,12 +4,12 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-pynput = "*"
+pynput = { sys_platform = "== 'win32'"}
 qrcode = "*"
-"infi.systray" = {version = "*", sys_platform = "== 'win32'"}
+"infi.systray" = { sys_platform = "== 'win32'"}
 
 [dev-packages]
 pyinstaller = "*"
 
 [requires]
-python_version = "3.10"
+python_version = "3.12"
